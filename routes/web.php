@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Job;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,6 +21,21 @@ use Inertia\Inertia;
 |
 */
 
+
+
 Route::inertia('/', 'shell')->name('home');
+
+Route::get('/api/jobs', function ()  {
+    return response()->json([
+        'jobs' => Job::getAll(),
+    ]);
+})->name('jobs');
+
+Route::get('/api/jobs/{jobId}', function ($jobId)  {
+ 
+    return response()->json([
+        'job' => Job::getJobById($jobId),
+    ]);
+})->name('jobDetails');
 
 Route::fallback(fn () => Inertia::render('shell'));

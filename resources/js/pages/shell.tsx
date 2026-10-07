@@ -1,8 +1,11 @@
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 
-import About from '@/views/about';
-import NotFound from '@/views/not-found';
-import Welcome from '@/views/welcome';
+import JobDetails from "@/views/jobDetails";
+import NotFound from "@/views/not-found";
+import Home from "@/views/home";
+import NavBar from "@/components/NavBar";
+import Contact from "@/views/contact";
 
 /**
  * The only Inertia page in this app.
@@ -14,17 +17,22 @@ import Welcome from '@/views/welcome';
 export default function Shell() {
     return (
         <BrowserRouter>
-            <nav>
-                {/* Use React Router's <Link>, never <a href> or Inertia's
-                    <Link> — both would trigger a full page load. */}
-                <Link to="/">Home</Link> <Link to="/about">About</Link>
-            </nav>
+            <ChakraProvider value={defaultSystem}>
+                <NavBar
+                    links={[
+                        { href: "/", label: "Home" },
+                        { href: "/about", label: "About" },
+                        { href: "/contact", label: "Contact" },
+                    ]}
+                />
 
-            <Routes>
-                <Route path="/" element={<Welcome />} />
-                <Route path="/about" element={<About />} />
-                <Route path="*" element={<NotFound />} />
-            </Routes>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/jobs/:jobId" element={<JobDetails />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </ChakraProvider>
         </BrowserRouter>
     );
 }
